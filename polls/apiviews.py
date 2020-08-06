@@ -2,9 +2,10 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework import viewsets
 
 from .models import Poll, Choice
-from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
+from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer, UserSerializer
 
 
 class PollList(generics.ListCreateAPIView):
@@ -15,10 +16,6 @@ class PollList(generics.ListCreateAPIView):
 class PollDetail(generics.RetrieveDestroyAPIView):
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
-
-
-
-
 
 class ChoiceList(generics.ListCreateAPIView):
     def get_queryset(self):
@@ -39,3 +36,11 @@ class CreateVote(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PollViewSet(viewsets.ModelViewSet):
+    queryset = Poll.objects.all()
+    serializer_class = PollSerializer
+
+class UserCreate(generics.CreateAPIView):
+    serializer_class = UserSerializer
